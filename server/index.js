@@ -84,13 +84,6 @@ function remove(filename) {
   }, 1000)
 }
 
-app.get('/api', (req, res) => {
-  const path = `/api/item/${v4()}`;
-  res.setHeader('Content-Type', 'text/html');
-  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
-});
-
 app.get("/problems", async (req, res) => {
   let result = await problems.find({}).toArray();
   res.send(result);
@@ -152,5 +145,3 @@ app.post("/test/:pid", (req, res) => {
 app.listen(process.env.PORT || PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-module.exports = app;
