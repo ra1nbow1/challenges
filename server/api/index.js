@@ -8,9 +8,24 @@ const fs = require("fs");
 const PORT = 8000;
 require("dotenv").config();
 const { spawn } = require('node:child_process');
+const winston = require('winston');
+const { combine, timestamp, printf, colorize, align } = winston.format;
 
 app.use(cors());
 app.use(express.json());
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: combine(
+    colorize({ all: true }),
+    timestamp({
+      format: 'DD.MM.YYYY HH:mm:ss',
+    }),
+    align(),
+    printf((info) => `[${info.level}] ${info.timestamp}: ${info.message}`)
+  ),
+  transports: [new winston.transports.Console()],
+});
 
 const client = new MongoClient(process.env.MONGO_URL);
 const problems = client
@@ -18,8 +33,8 @@ const problems = client
   .collection(process.env.COLLECTION_NAME);
 
 client.connect().then((client) => {
-  console.log("Подключение установлено");
-  console.log(client.options.dbName);
+  logger.info('Подключение установлено')
+  logger.info(client.options.dbName)
 });
 
 const options = {
@@ -42,6 +57,7 @@ function run(solution, pid = 0) {
     setTimeout(() => {
       python.stdout.off("data", data => resolve(data.toString()));
       resolve(["Превышено время ожидания. Возможно, найдены бесконечные процессы."]);
+      logger.warn(`pid: ${pid} Найден бесконечный цикл или решение не вывело результат`)
       remove(`../run_${pid}.py`)
       remove(`../run_0.py`)
       python.kill()
@@ -74,11 +90,11 @@ function remove(filename) {
   setTimeout(() => {
     fs.unlink(filename, function(err) {
       if(err && err.code == 'ENOENT') {
-          console.info("File doesn't exist, won't remove it.");
+          logger.info("Файла не существует");
       } else if (err) {
-          console.error("Error occurred while trying to remove file");
+          logger.error("Возникла ошибка при удалении файла");
       } else {
-          console.info(`${filename} removed`);
+        logger.info(`${filename} удален`);
       }
     });
   }, 1000)
@@ -89,16 +105,19 @@ app.get('/', (req, res) => {
 });
 
 app.get("/problems", async (req, res) => {
+  logger.info('/problems')
   let result = await problems.find({}).toArray();
   res.send(result);
 });
 
 app.get("/problem_info/:pid", async (req, res) => {
+  logger.info(`/problem_info/${req.params.pid}`)
   let result = await problems.findOne({ pid: req.params.pid });
   res.send(result);
 });
 
 app.post('/run', async (req, res) => {
+  logger.info(`/run`)
   await run(req.body.code)
   .then(results => {
     res.send(results)
@@ -110,6 +129,7 @@ app.post('/run', async (req, res) => {
 })
 
 app.post("/test/:pid", (req, res) => {
+  logger.info(`/test/${req.params.pid}`)
   run(req.body.code, req.params.pid)
   .then(async () => {
       const problem = await problems.findOne({ pid: req.params.pid });
@@ -147,5 +167,5 @@ app.post("/test/:pid", (req, res) => {
 });
 
 app.listen(process.env.PORT || PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  logger.info(`Сервер запущен на порту ${PORT}`);
 });
