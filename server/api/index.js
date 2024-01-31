@@ -84,6 +84,10 @@ function remove(filename) {
   }, 1000)
 }
 
+app.get('/', (req, res) => {
+  res.send({"status": "OK"});
+});
+
 app.get("/problems", async (req, res) => {
   let result = await problems.find({}).toArray();
   res.send(result);
