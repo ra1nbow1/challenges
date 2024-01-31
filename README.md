@@ -3,7 +3,7 @@
 Simplified CodeWars website.
 Fullstack web application made with React and Express.
 
-# Installation
+## Installation
 
 ```bash
 npm i
@@ -12,14 +12,14 @@ npm i
 ```
 
 Create `.env` file in `server/` and paste
+
 ```env
 MONGO_URL="database_uri"
 DB_NAME="database_name"
 COLLECTION_NAME="collection_name"
 ```
 
-
-# Usage
+## Usage
 
 ```bash
 npm run dev
