@@ -10,7 +10,7 @@ import parse from 'html-react-parser';
 import { isMobile } from 'react-device-detect';
 
 function Problem() {
-  const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://progchallenges-backend.vercel.app"
+  const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://romanovmatvey.tech"
   const { problem_id } = useParams();
   const [problem, setProblem] = useState({});
   const [openedTab, setOpenedTab] = useState('instructions');

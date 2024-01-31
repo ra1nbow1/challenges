@@ -7,7 +7,7 @@ function ProblemsList() {
   const [problems, setProblems] = useState([]);
 
   useEffect(() => {
-    const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://progchallenges-backend.vercel.app"
+    const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://romanovmatvey.tech"
     axios.get(`${baseUrl}/problems`).then((response) => {
       setProblems(response.data);
     });
