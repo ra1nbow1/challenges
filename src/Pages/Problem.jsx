@@ -10,7 +10,7 @@ import parse from 'html-react-parser';
 import { isMobile } from 'react-device-detect';
 
 function Problem() {
-
+  const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://progchallenges-backend.vercel.app"
   const { problem_id } = useParams();
   const [problem, setProblem] = useState({});
   const [openedTab, setOpenedTab] = useState('instructions');
@@ -19,7 +19,7 @@ function Problem() {
   const [difficultyColor, setDifficultyColor] = useState('gray')
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/problem_info/${problem_id}`).then((response) => {
+    axios.get(`${baseUrl}/problem_info/${problem_id}`).then((response) => {
       switch (response.data.difficulty) {
         case 'easy':
           response.data.difficulty = 'простой'
@@ -41,7 +41,7 @@ function Problem() {
 
   const run = () => {
     setOpenedTab('output')
-    axios.post(`http://localhost:8000/run`, {
+    axios.post(`${baseUrl}/run`, {
         code: solution,
       }).then((response) => {
         const status = response.data.exitCode == undefined ? true : false
@@ -63,7 +63,7 @@ function Problem() {
     setOpenedTab('output')
     // Проверка валидности названия функции и колва аргументов
     if (solution.includes(' solution(') && solution.split('\n')[0].split('(').length == problem.test_cases[0].split('(').length) {
-    axios.post(`http://localhost:8000/test/${problem_id}`, {
+    axios.post(`${baseUrl}/test/${problem_id}`, {
         code: solution,
       }).then((response) => {
         if (response.data == true) {

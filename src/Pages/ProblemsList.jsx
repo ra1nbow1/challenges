@@ -7,7 +7,8 @@ function ProblemsList() {
   const [problems, setProblems] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/problems").then((response) => {
+    const baseUrl = import.meta.env.VITE_PRODUCTION == "false" ? 'http://localhost:8000'  : "https://progchallenges-backend.vercel.app"
+    axios.get(`${baseUrl}/problems`).then((response) => {
       setProblems(response.data);
     });
   }, []);
