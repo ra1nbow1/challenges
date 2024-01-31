@@ -11,6 +11,14 @@ cd server
 npm i
 ```
 
+Create `.env` file in `server/` and paste
+```env
+MONGO_URL="database_uri"
+DB_NAME="database_name"
+COLLECTION_NAME="collection_name"
+```
+
+
 # Usage
 
 ```bash
