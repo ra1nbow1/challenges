@@ -20,6 +20,7 @@ function Problem() {
 
   useEffect(() => {
     axios.get(`${baseUrl}/problem_info/${problem_id}`).then((response) => {
+      document.title = `Romanov — ${response.data.title}`;
       switch (response.data.difficulty) {
         case 'easy':
           response.data.difficulty = 'простой'
