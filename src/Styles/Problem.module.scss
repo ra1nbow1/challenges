@@ -6,9 +6,7 @@ $dark-gray: #252424;
     flex-direction: row;
     justify-content: center;
     padding: 2.81rem;
-    width: 100px;
     height: 100%;
-    width: 1750px;
     gap: 1dvw;
     position: absolute;
     left: 50%;
@@ -96,11 +94,10 @@ $dark-gray: #252424;
         .instructions_button {
             margin-right: 1dvw;
         }
-
     }
 
     .tab {
-        height: 50.9375rem;
+        min-height: 792px;
         overflow-y: scroll;
         background: $light-gray;
         padding: 2rem;
