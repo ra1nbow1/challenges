@@ -1,6 +1,5 @@
-import { useParams } from "react-router-dom";
 import styles from '../Styles/Problem.module.scss'
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from 'react'
 import CodeMirror from '@uiw/react-codemirror';
@@ -45,7 +44,7 @@ function Problem() {
     axios.post(`${baseUrl}/run`, {
         code: solution,
       }).then((response) => {
-        const status = response.data.exitCode == undefined ? true : false
+        const status = response.data.exitCode == undefined
         if (status) {
           let displayData = []
           response.data.forEach(element => {
@@ -67,7 +66,7 @@ function Problem() {
     axios.post(`${baseUrl}/test/${problem_id}`, {
         code: solution,
       }).then((response) => {
-        if (response.data == true) {
+        if (response.data) {
           setOutput('Все тесты прошли успешно!')
         }
         else {
