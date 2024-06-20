@@ -3,6 +3,8 @@
 Simplified CodeWars website.
 Fullstack web application made with React and Express.
 
+JavaScript version is available in the commit history.
+
 ## Installation
 
 ```bash
@@ -43,8 +45,3 @@ Each database element looks like this:
   "code": "string"
 }
 ```
-
-
-
-
-
