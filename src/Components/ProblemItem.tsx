@@ -1,29 +1,26 @@
+import React, { MouseEvent } from "react";
 import styles from "../Styles/ProblemItem.module.scss";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import { IProblem, Difficulties } from '../Utils/Interfaces';
 
-function ProblemItem({ title, pid, difficulty }) {
+function ProblemItem({title, pid, difficulty}: Pick<IProblem, 'title' | 'pid' | 'difficulty'>) {
   const navigate = useNavigate();
-  // TODO: Заменить цвета
-  let border_color = "gray";
+  let border_color: 'gray' | '#49CD33' | '#CD7D33' | '#CE2323' = "gray";
   switch (difficulty) {
-    case "easy":
+    case Difficulties.easy:
       border_color = "#49CD33";
       break;
-    case "normal":
+    case Difficulties.normal:
       border_color = "#CD7D33";
       break;
-    case "hard":
+    case Difficulties.hard:
       border_color = "#CE2323";
-      break;
-    default:
-      difficulty = "gray";
       break;
   }
 
   return (
     <button
-      onClick={() => navigate(`/problem/${pid}`)}
+      onClick={(e: MouseEvent<HTMLButtonElement>): void => {navigate(`/problem/${pid}`)}}
       className={styles.item}
       style={{ borderColor: border_color }}
     >
@@ -31,11 +28,5 @@ function ProblemItem({ title, pid, difficulty }) {
     </button>
   );
 }
-
-ProblemItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  pid: PropTypes.string.isRequired,
-  difficulty: PropTypes.string.isRequired,
-};
 
 export default ProblemItem;

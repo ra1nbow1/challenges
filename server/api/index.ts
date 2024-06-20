@@ -22,7 +22,7 @@ const logger = winston.createLogger({
       format: 'DD.MM.YYYY HH:mm:ss',
     }),
     align(),
-    printf((info) => `[${info.level}] ${info.timestamp}: ${info.message}`)
+    printf((info): string => `[${info.level}] ${info.timestamp}: ${info.message}`)
   ),
   transports: [new winston.transports.Console()],
 });
@@ -32,7 +32,7 @@ const problems = client
   .db(process.env.DB_NAME)
   .collection(process.env.COLLECTION_NAME);
 
-client.connect().then((client) => {
+client.connect().then((client): void => {
   logger.info('Подключение установлено')
   logger.info(client.options.dbName)
 });
@@ -42,19 +42,19 @@ const options = {
   pythonOptions: ["-u"],
 };
 
-function run(solution, pid = 0) {
-  fs.writeFile(`../run_${pid}.py`, solution, (err) => {
+function run(solution: string, pid: number = 0): Promise<unknown> {
+  fs.writeFile(`../run_${pid}.py`, solution, (err): void => {
     if (err) throw err;
   });
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject): void => {
     const python = spawn("python3", [`../run_${pid}.py`]);
 
-    let output = ''
-    python.stdout.on("data", (data) => {
+    let output: string = ''
+    python.stdout.on("data", (data): void => {
       output += data.toString()
     });
 
-    setTimeout(() => {
+    setTimeout((): void => {
       python.stdout.off("data", data => resolve(data.toString()));
       resolve(["Превышено время ожидания. Возможно, найдены бесконечные процессы."]);
       logger.warn(`pid: ${pid} Найден бесконечный цикл или решение не вывело результат`)
@@ -62,12 +62,12 @@ function run(solution, pid = 0) {
       remove(`../run_0.py`)
       python.kill()
     }, 2000);
-    let errors = ''
+    let errors: string = ''
     python.stderr.on("data", (data) => {
       errors += data.toString()
     });
 
-    python.on("close", () => {
+    python.on("close", (): void => {
       if (errors.length > 0) {
         reject(errors.split('\n'))
         remove(`../run_${pid}.py`)
@@ -86,9 +86,9 @@ function run(solution, pid = 0) {
   })
 }
 
-function remove(filename) {
-  setTimeout(() => {
-    fs.unlink(filename, function(err) {
+function remove(filename: string): void {
+  setTimeout((): void => {
+    fs.unlink(filename, function(err): void {
       if(err && err.code == 'ENOENT') {
           logger.info("Файла не существует");
       } else if (err) {
@@ -100,23 +100,32 @@ function remove(filename) {
   }, 1000)
 }
 
-app.get('/', (req, res) => {
+app.get('/', (req, res): void => {
   res.send({"status": "OK"});
 });
 
-app.get("/problems", async (req, res) => {
+app.get("/problems", async (req, res): Promise<void> => {
   logger.info('/problems')
   let result = await problems.find({}).toArray();
   res.send(result);
 });
 
-app.get("/problem_info/:pid", async (req, res) => {
+app.get("/problem_info/:pid", async (req: IRequest, res): Promise<void> => {
   logger.info(`/problem_info/${req.params.pid}`)
   let result = await problems.findOne({ pid: req.params.pid });
   res.send(result);
 });
 
-app.post('/run', async (req, res) => {
+interface IRequest {
+  body: {
+    code: string
+  },
+  params: {
+    pid: number
+  }
+}
+
+app.post('/run', async (req: IRequest, res): Promise<void> => {
   logger.info(`/run`)
   await run(req.body.code)
   .then(results => {
@@ -128,24 +137,23 @@ app.post('/run', async (req, res) => {
 
 })
 
-app.post("/test/:pid", (req, res) => {
+app.post("/test/:pid", (req: IRequest, res): void => {
   logger.info(`/test/${req.params.pid}`)
   run(req.body.code, req.params.pid)
-  .then(async () => {
+  .then(async (): Promise<void> => {
       const problem = await problems.findOne({ pid: req.params.pid });
       const test_cases = problem["test_cases"];
 
-      let test_file =
-        `from run_${req.params.pid} import solution\n`
+      let test_file = `from run_${req.params.pid} import solution\n`
       for (const test of test_cases) {
         test_file += 'print(' + test + ')\n'
       }
-      fs.writeFile(`../tests_${req.params.pid}.py`, test_file, (err) => {
+      fs.writeFile(`../tests_${req.params.pid}.py`, test_file, (err): void => {
         if (err) throw err;
       });
-      PythonShell.run(`../tests_${req.params.pid}.py`, options).then(function (result) {
+      PythonShell.run(`../tests_${req.params.pid}.py`, options).then(function (result): void {
         let passing = true
-        result.forEach((element) => {
+        result.forEach((element): void => {
           if (element !== "True") {
             passing = false
           }
@@ -153,19 +161,19 @@ app.post("/test/:pid", (req, res) => {
         res.send(passing)
 
     })
-    .catch(function (err) {
+    .catch(function (err): void {
       res.send(err)
     });
-  }).then(() => {
+  }).then((): void => {
     remove(`../tests_${req.params.pid}.py`)
   })
-  .catch(function (err) {
+  .catch(function (err): void {
     res.send(err);
   });
 
 
 });
 
-app.listen(process.env.PORT || PORT, () => {
+app.listen(process.env.PORT || PORT, (): void => {
   logger.info(`Сервер запущен на порту ${PORT}`);
 });
