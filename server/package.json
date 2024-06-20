@@ -2,11 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon api/index.js",
-    "prod": "node api/index.js"
+    "start": "nodemon api/index.ts",
+    "prod": "node api/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +20,7 @@
     "express": "^4.18.2",
     "mongodb": "^6.3.0",
     "python-shell": "^5.0.0",
+    "ts-node": "^10.9.2",
     "winston": "^3.11.0"
   }
 }
