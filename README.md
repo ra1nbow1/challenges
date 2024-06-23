@@ -35,14 +35,11 @@ Each database element looks like this:
 
 ```json
 {
-  "pid": "string",
-  "title": "string",
-  "instructions": "string",
-  "difficulty": "<easy|normal|hard>",
-  "test_cases": [
-    "solution(args1) == result1",
-    "solution(args2) == result2",
-  ],
-  "code": "string"
+"pid": "string",
+"title": "string",
+"instructions": "string",
+"difficulty": "<easy|normal|hard>",
+"test_cases": ["solution(args1) == result1", "solution(args2) == result2"],
+"code": "string"
 }
 ```
