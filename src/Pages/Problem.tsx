@@ -12,7 +12,7 @@ import { IProblem, Difficulties } from '../Utils/Interfaces'
 function Problem() {
 	const baseUrl =
 		(import.meta.env.VITE_PRODUCTION as string) === 'false'
-			? 'http://localhost:8000'
+			? 'http://localhost:3000'
 			: 'https://romanovmatvey.tech'
 	const { problem_id } = useParams<{ problem_id: IProblem['pid'] }>()
 	const [problem, setProblem] = useState<IProblem>({

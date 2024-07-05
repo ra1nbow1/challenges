@@ -9,7 +9,7 @@ function ProblemsList() {
 	useEffect(() => {
 		const baseUrl =
 			import.meta.env.VITE_PRODUCTION == 'false'
-				? 'http://localhost:8000'
+				? 'http://localhost:3000'
 				: 'https://romanovmatvey.tech'
 		axios.get(`${baseUrl}/problems`).then((response) => {
 			setProblems(response.data)

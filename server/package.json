@@ -3,16 +3,22 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.ts",
+	"type": "module",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon api/index.ts",
-		"prod": "node api/index.ts"
+		"dev": "nodemon api/index.ts",
+		"prod": "node --es-module-specifier-resolution=node api/index.js",
+		"build": "tsc --build"
 	},
-	"keywords": [],
+	"keywords": [
+		"test"
+	],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"nodemon": "^3.0.3"
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"nodemon": "^3.0.3",
+		"typescript": "^5.5.3"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
