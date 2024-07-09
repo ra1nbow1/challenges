@@ -10,7 +10,7 @@ function ProblemsList() {
 		const baseUrl =
 			import.meta.env.VITE_PRODUCTION == 'false'
 				? 'http://localhost:3000'
-				: 'https://romanovmatvey.tech'
+				: import.meta.env.VITE_BACKEND_URL
 		axios.get(`${baseUrl}/problems`).then((response) => {
 			setProblems(response.data)
 			document.title = `Romanov — Задачи`

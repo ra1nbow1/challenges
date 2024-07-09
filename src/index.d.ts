@@ -5,6 +5,7 @@ declare module '*.scss' {
 
 interface ImportMetaEnv {
 	readonly VITE_PRODUCTION: string
+	readonly VITE_BACKEND_URL: string
 }
 
 interface ImportMeta {

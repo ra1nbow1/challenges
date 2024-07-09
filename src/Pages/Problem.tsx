@@ -13,7 +13,7 @@ function Problem() {
 	const baseUrl =
 		(import.meta.env.VITE_PRODUCTION as string) === 'false'
 			? 'http://localhost:3000'
-			: 'https://challenges-backend.ra1nbow.xyz'
+			: import.meta.env.VITE_BACKEND_URL
 	const { problem_id } = useParams<{ problem_id: IProblem['pid'] }>()
 	const [problem, setProblem] = useState<IProblem>({
 		pid: '',
