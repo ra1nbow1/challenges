@@ -1,24 +1,24 @@
 services:
-  backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile.backend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./server:/app
-    environment:
-      - NODE_ENV=production
+    backend:
+        build:
+            context: ./server
+            dockerfile: Dockerfile.backend
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./server:/app
+        environment:
+            - NODE_ENV=production
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    ports:
-      - "80:80"
-    volumes:
-      - .:/app
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - backend
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile.frontend
+        ports:
+            - "80:80"
+        volumes:
+            - .:/app
+        environment:
+            - NODE_ENV=production
+        depends_on:
+            - backend
